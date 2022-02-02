@@ -6,6 +6,7 @@ if tf == 0
 end
 file = list(indx);
 fileName = fullfile(file.folder, file.name);
+disp(['Loaded ', fileName]);
 im = im2double(imread(fileName));
 end
 

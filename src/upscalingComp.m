@@ -1,8 +1,10 @@
 clear
 addpath('./../ext/fig-utils') % showmethefigs
+addpath('./ogniewski')
 
 %%
 im = imread('./../data/pixel-cube.png');
+whos im
 
 scaleMethods = {'nearest', 'bilinear', 'bicubic', 'lanczos2', 'lanczos3'};
 scaleFactor = 100;
