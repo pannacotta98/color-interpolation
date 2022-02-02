@@ -5,6 +5,7 @@ function out_imgs = convertCSpace(in_imgs,cSpace)
 %   cSpace: The desired color space, for example 'cielab'
 %Outputs:
 %   out_imgs: Cell array of images in new color space
+addpath('./../ext/fig-utils') % showmethefigs
 
 out_imgs = cell(1,length(in_imgs));
 
@@ -32,4 +33,8 @@ elseif strcmp(cSpace,'hsv')
         out_imgs{i} = rgb2hsv(in_imgs{i});
         imshow(out_imgs{i});
     end
+end
+    
+    showmethefigs(3);
+    close all
 end
