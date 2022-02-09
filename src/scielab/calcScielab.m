@@ -14,7 +14,7 @@ load displayGamma;
 rgbWhite = [1 1 1];
 whitepoint = rgbWhite * rgb2lms'
     
-    % Convert the RGB data to LMS.
+% Convert the RGB data to LMS.
     
 img1LMS = changeColorSpace(org_img,rgb2lms);
 img2LMS = changeColorSpace(interp_img,rgb2lms);
@@ -22,10 +22,8 @@ imageformat = 'lms';
     
 % Run the scielab function
 errorImage = scielab(sampPerDeg, img1LMS, img2LMS, whitepoint, imageformat);
-    
-% Only include errors bigger than 20 because values below not noticable?
-sum_error = sum(errorImage(:) > 20)
-mean_error = mean(errorImage(:) > 20)
+%Get the mean scielab difference
+mean_error = mean(errorImage(:))
     
     
 errorTruncated = min(128*(errorImage/10),128*ones(size(errorImage)));
