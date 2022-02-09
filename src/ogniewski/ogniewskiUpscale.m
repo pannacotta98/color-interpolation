@@ -22,8 +22,11 @@ for x = 1:width
     yin = inCoordY(y);
     xin = inCoordX(x);
     
-    h = round(yin);
-    g = round(xin);
+%     h = round(yin);
+%     g = round(xin);
+
+    h = min(size(im,1), max(1, floor(yin)));
+    g = min(size(im,2), max(1, floor(xin)));
     
     %fprintf("h=%i g=%i\n", h, g);
 
@@ -93,6 +96,20 @@ for x = 1:width
 
 %     nearest = round([inCoordY(y), inCoordX(x)]);
 %     scaledIm(y, x, :) = im(nearest(1), nearest(2), :);
+
+%     scaledIm(y,x,:) = im(h,g,:);
+
+
+%     % TESTING lerp to see if that works
+%     scaledIm(y, x, :) = (1-by) * (1-bx) * bc(2,2,:) ...
+%         + by * (1-bx) * bc(3,2,:) ...
+%         + (1-by) * bx * bc(2,3,:) ...
+%         + by * bx * bc(3,3,:);
+
+
+%     if signx == -1 || signy == -1
+%         scaledIm(y,x,:) = 0;
+%     end
 end
 end
 
