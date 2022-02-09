@@ -5,30 +5,17 @@ function scaledIm = ogniewskiUpscale(im, scaleFactor)
 
 alphas = getCValues(im);
 
-%% === Simple temporary outline ===
-% Calculate new pixel locations, see matlab.images.internal.resize.contributions
-% Interpolate the alpha values
-% Do the final interpolation
-
-%%
 [height, width, inCoordX, inCoordY] = calcNewGeometry(im, scaleFactor);
 scaledIm = zeros(height, width, 3);
 
-% I mightve mixed up x and y, TODO check!
-
-%%
-for y = 1:height % pixel indices in upscaled image
+for y = 1:height % Pixel indices in upscaled image
 for x = 1:width
     yin = inCoordY(y);
     xin = inCoordX(x);
-    
-%     h = round(yin);
-%     g = round(xin);
 
+    % Positions in input space
     h = min(size(im,1), max(1, floor(yin)));
     g = min(size(im,2), max(1, floor(xin)));
-    
-    %fprintf("h=%i g=%i\n", h, g);
 
     bx = xin - floor(xin) - 0.5;
     by = yin - floor(yin) - 0.5;
@@ -37,7 +24,8 @@ for x = 1:width
     bx = abs(bx);
     by = abs(by);
 
-    bc = zeros(3,3,3); % 3x3 neighborhood colors
+    % 3x3 neighborhood colors
+    bc = zeros(3,3,3);
     for dy = 1:3
     for dx = 1:3
         ty = (dy - 2) * signy + h;
@@ -56,60 +44,21 @@ for x = 1:width
     end
     end
     
+    % Inside the parenthesis of last term eq 4 divided by 4
     ad4x = 3*bx^2 - 4*bx^3;
     ad4y = 3*by^2 - 4*by^3;
 
-    wx = [
-        ax0 .* (bx^2 - bx + ad4x)
-		1 - bx^2 - (1 + ax0.*2 - ax1.*2) * ad4x
-		(1 - ax0).*bx^2 + ax0.*bx + ((1 + ax0.*2 - ax1.*2) - ax0).*ad4x
-    ];
-    wy = [
-        ay0 .* (by^2 - by + ad4y)
-		1 - by^2 - (1 + ay0.*2 - ay1.*2) .* ad4y
-		(1 - ay0).*by^2 + ay0.*by + ((1 + ay0.*2 - ay1.*2) - ay0).*ad4y
-    ];
+    wx = [ax0 .* (bx^2 - bx + ad4x)
+		  1 - bx^2 - (1 + ax0.*2 - ax1.*2) * ad4x
+		  (1 - ax0).*bx^2 + ax0.*bx + ((1 + ax0.*2 - ax1.*2) - ax0).*ad4x];
+    wy = [ay0 .* (by^2 - by + ad4y)
+		  1 - by^2 - (1 + ay0.*2 - ay1.*2) .* ad4y
+		  (1 - ay0).*by^2 + ay0.*by + ((1 + ay0.*2 - ay1.*2) - ay0).*ad4y];
 
-    %%
-
-    %disp(wy * wx')
     tc = sum(sum(bc .* (wy * wx'), 1), 2);
     
-    % TODO Clamp!
-
-    scaledIm(y, x, :) = tc;
-
-    %% Testing
-%         scaledIm(x,y,1) = mod(g, 2);
-%         scaledIm(x,y,2) = h * 0.05;
-
-%         scaledIm(x,y,:) = im(g, h,:);
-
-%         scaledIm(y, x, 1) = bx;
-%         scaledIm(y, x, 2) = by;
-
-%     scaledIm(y, x, 1) = mod(g, 2);
-%     scaledIm(y, x, 2) = bx;
-% 
-%     scaledIm(y, x, 1) = mod(h, 2);
-%     scaledIm(y, x, 2) = by;
-
-%     nearest = round([inCoordY(y), inCoordX(x)]);
-%     scaledIm(y, x, :) = im(nearest(1), nearest(2), :);
-
-%     scaledIm(y,x,:) = im(h,g,:);
-
-
-%     % TESTING lerp to see if that works
-%     scaledIm(y, x, :) = (1-by) * (1-bx) * bc(2,2,:) ...
-%         + by * (1-bx) * bc(3,2,:) ...
-%         + (1-by) * bx * bc(2,3,:) ...
-%         + by * bx * bc(3,3,:);
-
-
-%     if signx == -1 || signy == -1
-%         scaledIm(y,x,:) = 0;
-%     end
+    % Clamp final value to valid range
+    scaledIm(y, x, :) = min(1, max(0, tc));
 end
 end
 

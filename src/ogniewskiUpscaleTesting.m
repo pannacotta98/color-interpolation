@@ -10,20 +10,6 @@ im = loadTestImage();
 imshow(im);
 
 %%
-clc % TEMP
-
-scaleFactor = 20;
-
+scaleFactor = 10;
 scaledIm = ogniewskiUpscale(im, scaleFactor);
-% test = imresize(im, 20, 'nearest');
-% diff = scaledIm - test;
-% imshow(diff);
-%scaledIm = eq1Interpolate(im, 200);
-
-scaledOther = imresize(im, scaleFactor, 'bilinear');
-
-subplot(1,2,1);
-imshow(scaledIm); title('Ours')
-
-subplot(1,2,2);
-imshow(scaledOther); title('Built-in')
+imshow(scaledIm);
