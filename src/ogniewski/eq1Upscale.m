@@ -29,7 +29,11 @@ for x = 1:width
         ty = max(1, min(size(im, 1), ty));
         tx = max(1, min(size(im, 2), tx));
         
-        bc(dy, dx, :) = im(ty, tx, :);
+        % This is much faster than `bc(dy, dx, :) = im(ty, tx, :);`
+        % Why? No idea
+        bc(dy, dx, 1) = im(ty, tx, 1);
+        bc(dy, dx, 2) = im(ty, tx, 2);
+        bc(dy, dx, 3) = im(ty, tx, 3);
     end
     end
     
