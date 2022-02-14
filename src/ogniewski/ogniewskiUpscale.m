@@ -62,8 +62,11 @@ for x = 1:width
     tc = sum(sum(bc .* (wy * wx'), 1), 2);
     
     % Clamp final value to valid range
-    scaledIm(y, x, :) = min(1, max(0, tc));
-end
-end
+    % scaledIm(y, x, :) = min(1, max(0, tc));
 
+    % Or dont
+    scaledIm(y, x, :) = tc;
+end
+end
+disp('Dont forget to clamp final result for measurements!')
 end
