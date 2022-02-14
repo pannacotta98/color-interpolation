@@ -3,11 +3,11 @@ addpath('./../ext/fig-utils') % showmethefigs
 addpath('./ogniewski')
 
 %%
-im = imread('./../data/pixel-cube.png');
+im = loadTestImage();
 whos im
 
 scaleMethods = {'nearest', 'bilinear', 'bicubic', 'lanczos2', 'lanczos3'};
-scaleFactor = 100;
+scaleFactor = 10;
 
 for i = 1:length(scaleMethods)
    figure('Name', scaleMethods{i});
@@ -16,6 +16,20 @@ for i = 1:length(scaleMethods)
    title(scaleMethods{i});
 end
 
+figure('Name', 'ogniewski');
+imUp = ogniewskiUpscale(im, scaleFactor);
+imshow(imUp);
+title('ogniewski');
+
+figure('Name', 'ogniewski eq 1');
+imUp = eq1Upscale(im, scaleFactor);
+imshow(imUp);
+title('ogniewski eq 1');
+
+disp('done')
+
+%%
 showmethefigs(3);
 
+%%
 close all
