@@ -68,5 +68,4 @@ for x = 1:width
     scaledIm(y, x, :) = tc;
 end
 end
-disp('Dont forget to clamp final result for measurements!')
 end
