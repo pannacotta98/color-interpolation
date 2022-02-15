@@ -1,4 +1,4 @@
-function out = upscaleInColorSpace(in, scaleFactor, colorSpace, method)
+function out = upscaleInColorSpace(in, scaleFactor, colorSpace, method, verbose)
     if strcmp(colorSpace, 'srgb')
         % Do nothing
         transf = @(x) x;
@@ -23,13 +23,24 @@ function out = upscaleInColorSpace(in, scaleFactor, colorSpace, method)
     in = transf(in);
 
     if strcmp(method, 'ogniewski')
-        out = ogniewskiUpscale(in, scaleFactor);
+        outInColorSpace = ogniewskiUpscale(in, scaleFactor);
     elseif strcmp(method, 'eq1')
-        out = eq1Upscale(in, scaleFactor);
+        outInColorSpace = eq1Upscale(in, scaleFactor);
     else
-        out = imresize(in, scaleFactor, method);
+        outInColorSpace = imresize(in, scaleFactor, method);
     end
 
-    out = invTransf(out);
+    out = invTransf(outInColorSpace);
+
+    if nargin == 5 && verbose
+        disp(['=== ', method, ' == ' colorSpace, ' ==='])
+        disp(['Min/max value in color space: ' ...
+            num2str(min(outInColorSpace, [], 'all')), '/' ...
+            num2str(max(outInColorSpace, [], 'all'))]);
+        disp(['Min/max value in final image in srgb: ' ...
+            num2str(min(out, [], 'all')), '/' ...
+            num2str(max(out, [], 'all'))]);
+
+    end
 end
 
