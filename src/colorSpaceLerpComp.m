@@ -1,7 +1,9 @@
 %%
 % Blue to yellow creates magenta-ish in lab?
-from = [0 0 1];
-to = [1 1 0];
+% from = [0 0 1];
+% to = [1 1 0];
+from = uisetcolor();
+to = uisetcolor();
 in = zeros(1,2,3);
 in(1,1,:) = from;
 in(1,2,:) = to;
