@@ -69,4 +69,5 @@ for x = 1:width
 end
 end
 disp('Dont forget to clamp final result for measurements!')
+% Actually i guess it isn't supposed to clip anyways
 end

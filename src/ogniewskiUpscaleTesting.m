@@ -5,7 +5,7 @@ addpath('./ogniewski')
 %%
 %im = im2double(imread('./../data/jens/vikings_baelog_input.png'));
 im = loadTestImage();
-scaleFactor = 30;
+scaleFactor = 4;
 
 %%
 imshow(im);

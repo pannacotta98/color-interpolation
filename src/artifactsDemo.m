@@ -1,6 +1,7 @@
 %% Demonstration of artifacts that can occur when interpolating color
 clear
 addpath('./../ext/fig-utils') % showmethefigs
+addpath('./../ext/matlab2tikz/src');
 im = loadTestImage();
 scaleFactor = 30;
 
@@ -17,6 +18,9 @@ clipping = imresize(im, scaleFactor, 'bicubic');
 imshow(clipping);
 disp(['Max value in clipping image: ', num2str(max(clipping, [], 'all'))]);
 disp(['Min value in clipping image: ', num2str(min(clipping, [], 'all'))]);
+
+%%
+imwrite(clipping, './../output/clipping.png');
 
 %% one plot
 yPlotRange = [-0.2; 1.2];
@@ -76,6 +80,20 @@ plot(clippingClipped(size(clippingClipped,1)/2, :, 3), 'b');
 ylim(yPlotRange)
 grid on
 
+%% only one channel
+plot(clipping(size(clipping,1)/2, :, 3), 'b');
+ylim(yPlotRange)
+ylabel('Pixel intensity')
+xlabel('Horizontal pixel position')
+grid on
+
+%%
+plot(clippingClipped(size(clippingClipped,1)/2, :, 3), 'b');
+ylim(yPlotRange)
+ylabel('Pixel intensity')
+xlabel('Horizontal pixel position')
+grid on
+
 %% surface plot
 clf
 mesh(clipping(:,:,1)); zlim(yPlotRange);
@@ -84,7 +102,12 @@ clf
 mesh(clippingClipped(:,:,1)); zlim(yPlotRange);
 
 %% === DISCOLORING ===
+clf
+discoloring = imresize(im, scaleFactor, 'lanczos3');
+imshow(discoloring);
 
+%%
+imwrite(discoloring, './../output/discoloring.png');
 
 %% === GRADIENT DISCREPANCY ===
 clf
