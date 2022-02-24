@@ -1,4 +1,4 @@
-load('../data/objValues.mat');
+load('../data/color-space-eval/objValues.mat');
 
 figure
 boxplot(SSIM,'Labels',{'sRGB','Lin RGB','HSV','YCbCr','CIELAB','XYZ'})
