@@ -28,10 +28,10 @@ errorImage = scielab(sampPerDeg, img1LMS, img2LMS, whitepoint, imageformat);
 meanError = mean(errorImage(:));
     
 %Output difference image    
-errorTruncated = min(128*(errorImage/10),128*ones(size(errorImage)));
-figure
-colormap([gray(127); [1 1 1]])
-image(errorTruncated)
+% errorTruncated = min(128*(errorImage/10),128*ones(size(errorImage)));
+% figure
+% colormap([gray(127); [1 1 1]])
+% image(errorTruncated)
 
 
 %figure(2)
