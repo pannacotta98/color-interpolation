@@ -1,8 +1,8 @@
 clear
 addpath('./scielab')
 addpath('./ogniewski')
-addpath('../data/640x400')
-img = loadTestImage();
+addpath('../data/color-space-eval/')
+%img = loadTestImage();
 scalefactor = 4;
 
 downscaleMethod = 'lanczos2';
@@ -34,8 +34,9 @@ img_xyz = upscaleInColorSpace(img_xyz_ds_clamped,scalefactor,'xyz',upscaleMethod
 
 
 colorSpace = {'SRGB';'LINRGB';'HSV';'YCBCR';'CIELAB';'XYZ'};
-SSIM = [ssim(img_srgb,img); ssim(img_lin,img); ssim(img_hsv,img);
-        ssim(img_ycbcr,img);ssim(img_lab,img);ssim(img_xyz,img);];
+SSIM = [mean(ssim(img_srgb,img,'DataFormat','SSC')); mean(ssim(img_lin,img,'DataFormat','SSC'));
+    mean(ssim(img_hsv,img,'DataFormat','SSC')); mean(ssim(img_ycbcr,img,'DataFormat','SSC'));
+    mean(ssim(img_lab,img,'DataFormat','SSC')); mean(ssim(img_xyz,img,'DataFormat','SSC'));];
 PSNR = [psnr(img_srgb,img); psnr(img_lin,img); psnr(img_hsv,img);
         psnr(img_ycbcr,img);psnr(img_lab,img);psnr(img_xyz,img)];
 SCIELAB = [calcScielab(img, img_srgb); calcScielab(img, img_lin);
