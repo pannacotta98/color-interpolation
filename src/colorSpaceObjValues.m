@@ -2,70 +2,58 @@ clear
 addpath('./scielab')
 addpath('./ogniewski')
 addpath('../data/color-space-eval/')
-%img = loadTestImage();
+img = loadTestImage();
 scalefactor = 4;
 
+downscaleAllInSameSpace = false;
+downscaleSpace = 'srgb'; % if above is true
 downscaleMethod = 'lanczos2';
 upscaleMethod = 'ogniewski';
 
-%Downscale
-img_srgb_ds = upscaleInColorSpace(img,1/scalefactor,'srgb',downscaleMethod);
-img_lin_ds = upscaleInColorSpace(img,1/scalefactor,'linrgb',downscaleMethod);
-img_hsv_ds = upscaleInColorSpace(img,1/scalefactor,'hsv',downscaleMethod);
-img_ycbcr_ds = upscaleInColorSpace(img,1/scalefactor,'ycbcr',downscaleMethod);
-img_lab_ds = upscaleInColorSpace(img,1/scalefactor,'lab',downscaleMethod);
-img_xyz_ds = upscaleInColorSpace(img,1/scalefactor,'xyz',downscaleMethod);
+spaces = {
+    'srgb'  % 1
+    'linrgb'% 2
+    'hsv'   % 3
+    'ycbcr' % 4
+    'lab'   % 5
+    'xyz'}; % 6
 
-%Clamp
-img_srgb_ds_clamped = clamp(img_srgb_ds,0,1);
-img_lin_ds_clamped = clamp(img_lin_ds,0,1);
-img_hsv_ds_clamped = clamp(img_hsv_ds,0,1);
-img_ycbcr_ds_clamped = clamp(img_ycbcr_ds,0,1);
-img_lab_ds_clamped = clamp(img_lab_ds,0,1);
-img_xyz_ds_clamped = clamp(img_xyz_ds,0,1);
+if downscaleAllInSameSpace
+    downscaled = upscaleInColorSpace(img, 1/scalefactor, downscaleSpace, downscaleMethod);
+    downscaled = clamp(downscaled, 0, 1);
+end
 
-%Upscale
-img_srgb = upscaleInColorSpace(img_srgb_ds_clamped,scalefactor,'srgb',upscaleMethod);
-img_lin = upscaleInColorSpace(img_lin_ds_clamped,scalefactor,'linrgb',upscaleMethod);
-img_hsv = upscaleInColorSpace(img_hsv_ds_clamped,scalefactor,'hsv',upscaleMethod);
-img_ycbcr = upscaleInColorSpace(img_ycbcr_ds_clamped,scalefactor,'ycbcr',upscaleMethod);
-img_lab = upscaleInColorSpace(img_lab_ds_clamped,scalefactor,'lab',upscaleMethod);
-img_xyz = upscaleInColorSpace(img_xyz_ds_clamped,scalefactor,'xyz',upscaleMethod);
+out = cell(length(spaces), 1);
+for i = 1:length(spaces)
+    if ~downscaleAllInSameSpace
+        downscaled = upscaleInColorSpace(img, 1/scalefactor, spaces{i}, downscaleMethod);
+        downscaled = clamp(downscaled, 0, 1);
+    end
+    upscaled = upscaleInColorSpace(downscaled, scalefactor, spaces{i}, upscaleMethod);
+    out{i} = upscaled;
+end
 
+SSIM = cellfun(@(scaled) mean(ssim(scaled,img,'DataFormat','SSC')), out);
+PSNR = cellfun(@(scaled) psnr(scaled,img), out);
+SCIELAB = cellfun(@(scaled) calcScielab(scaled,img), out);
+meanDeltaE = cellfun(@(scaled) mean(deltaE(scaled, img), 'all'), out);
+medianDeltaE = cellfun(@(scaled) median(deltaE(scaled, img), 'all'), out);
 
-colorSpace = {'SRGB';'LINRGB';'HSV';'YCBCR';'CIELAB';'XYZ'};
-SSIM = [mean(ssim(img_srgb,img,'DataFormat','SSC')); mean(ssim(img_lin,img,'DataFormat','SSC'));
-    mean(ssim(img_hsv,img,'DataFormat','SSC')); mean(ssim(img_ycbcr,img,'DataFormat','SSC'));
-    mean(ssim(img_lab,img,'DataFormat','SSC')); mean(ssim(img_xyz,img,'DataFormat','SSC'));];
-PSNR = [psnr(img_srgb,img); psnr(img_lin,img); psnr(img_hsv,img);
-        psnr(img_ycbcr,img);psnr(img_lab,img);psnr(img_xyz,img)];
-SCIELAB = [calcScielab(img, img_srgb); calcScielab(img, img_lin);
-          calcScielab(img, img_hsv); calcScielab(img, img_ycbcr);
-          calcScielab(img, img_lab);calcScielab(img, img_xyz)];
-meanDeltaE = [mean(deltaE(img, img_srgb),'all'); mean(deltaE(img, img_lin),  'all');
-              mean(deltaE(img, img_hsv), 'all'); mean(deltaE(img, img_ycbcr),'all');
-              mean(deltaE(img, img_lab), 'all'); mean(deltaE(img, img_xyz),  'all')];
-medianDeltaE = [median(deltaE(img, img_srgb),'all'); median(deltaE(img, img_lin),  'all');
-                median(deltaE(img, img_hsv), 'all'); median(deltaE(img, img_ycbcr),'all');
-                median(deltaE(img, img_lab), 'all'); median(deltaE(img, img_xyz),  'all')];
-
-table(colorSpace,SSIM,PSNR,SCIELAB,meanDeltaE, medianDeltaE)
+table(spaces, SSIM, PSNR, SCIELAB, meanDeltaE, medianDeltaE)
 
 %%
-bar(reordercats(categorical(colorSpace),colorSpace), SCIELAB)
+bar(reordercats(categorical(spaces), spaces), SCIELAB)
 
 %%
 close all
 %% Plot images
-figure; imshow(img_srgb); title('srgb');
-figure; imshow(img); title('original')
-figure; imshow(img_lin); title('lin');
-figure; imshow(img_hsv); title('hsv');
-figure; imshow(img_ycbcr); title('ycbcr');
-figure; imshow(img_lab); title('lab');
-figure; imshow(img_xyz); title('xyz');
+figure; imshow(img); title('original');
+for i = 1:length(spaces)
+    figure; imshow(out{i}); title(spaces{i});
+end
 %% Diff imgs delta E
 sc = 0.01;
-figure;imshow(sc * deltaE(img_srgb, img));title('srgb')
-figure;imshow(sc * deltaE(img_lin, img));title('lin')
+for i = 1:length(spaces)
+    figure; imshow(sc * deltaE(out{i}, img)); title(spaces{i});
+end
 
