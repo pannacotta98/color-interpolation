@@ -38,8 +38,10 @@ PSNR = cellfun(@(scaled) psnr(scaled,img), out);
 SCIELAB = cellfun(@(scaled) calcScielab(scaled,img), out);
 meanDeltaE = cellfun(@(scaled) mean(deltaE(scaled, img), 'all'), out);
 medianDeltaE = cellfun(@(scaled) median(deltaE(scaled, img), 'all'), out);
+NIQE = cellfun(@(scaled) niqe(scaled),out);
+BRISQUE = cellfun(@(scaled) brisque(scaled),out);
 
-table(spaces, SSIM, PSNR, SCIELAB, meanDeltaE, medianDeltaE)
+table(spaces, SSIM, PSNR, SCIELAB, meanDeltaE, medianDeltaE, NIQE, BRISQUE)
 
 %%
 bar(reordercats(categorical(spaces), spaces), SCIELAB)
