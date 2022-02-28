@@ -35,11 +35,11 @@ bar(PSNR)
 title("PSNR values for the images using different upscaling methods")
 ylabel("PSNR value")
 xlabel("Image")
-legend('nearest','bilinear','bicubic','lanczos3','Ogniewski')
+legend({'nearest','bilinear','bicubic','lanczos3','Ogniewski'},'Location','southwest')
 
 figure
 bar(SSIM)
 title("SSIM index for the images using different upscaling methods")
 ylabel("SSIM index")
 xlabel("Image")
-legend('nearest','bilinear','bicubic','lanczos3','Ogniewski')
+legend({'nearest','bilinear','bicubic','lanczos3','Ogniewski'},'Location','southwest')
