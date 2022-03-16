@@ -1,0 +1,6 @@
+image 1 = abstract
+image 2 = mosaic
+image 3 = pencils
+image 4 = duck
+image 5 = girl-bike
+image 6 = pixelart
