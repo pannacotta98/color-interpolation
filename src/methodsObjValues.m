@@ -27,7 +27,7 @@ SCIELAB = [calcScielab(img, img_near); calcScielab(img, img_bil); calcScielab(im
 table(interpMethod,SSIM,PSNR,SCIELAB)
 
 figure('Name', 'nearest');
-imshow(img_bil)
+imshow(img_near)
 figure('Name', 'bilinear');
 imshow(img_bil)
 figure('Name', 'bicubic');
@@ -36,3 +36,9 @@ figure('Name', 'lanczos2');
 imshow(img_lanc)
 figure('Name', 'ogniewski');
 imshow(img_og)
+
+%%
+diff = img_og - img;
+diffGray = im2gray(diff);
+imshow(abs(fftshift(fft2(diffGray))), [0 100])
+

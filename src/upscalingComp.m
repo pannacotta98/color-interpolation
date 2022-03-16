@@ -1,13 +1,14 @@
 clear
 addpath('./../ext/fig-utils') % showmethefigs
 addpath('./ogniewski')
-
+%%
+close all
 %%
 im = loadTestImage();
 whos im
 
 scaleMethods = {'nearest', 'bilinear', 'bicubic', 'lanczos2', 'lanczos3'};
-scaleFactor = 10;
+scaleFactor = 16;
 
 for i = 1:length(scaleMethods)
    figure('Name', scaleMethods{i});

@@ -43,4 +43,3 @@ function out = upscaleInColorSpace(in, scaleFactor, colorSpace, method, verbose)
 
     end
 end
-
