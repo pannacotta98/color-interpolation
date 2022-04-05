@@ -8,3 +8,5 @@
 - 640x400 res images taken from https://unsplash.com/. Cropped after.
 - pixel-trees.png https://www.pixilart.com/art/cactus-cactus-f411b376bae1?ft=popular&ft_id=
 - kharkov bus ... https://commons.wikimedia.org/wiki/File:Kharkov_Losk_bus.JPG
+- blue-citrus https://unsplash.com/photos/5E5N49RWtbA
+- hello-i-m-nik https://unsplash.com/photos/Geu-i5VvI1A

@@ -37,21 +37,25 @@ hold off
 %% ?
 clf
 ringing = imresize(im, scaleFactor, {@(x) lanczos(x,5), 10});
-subplot(311)
-imshow(ringing);
+subplot(312)
+imshow(repmat(ringing,[1 1 3]));
 title('Ringing')
 
-subplot(313)
-imshow(im);
+subplot(311)
+imshow(repmat(im, [1 1 3]));
 title('Original')
 
-subplot(312)
+subplot(313)
 yPlotRange = [0; 1];
 plot(near(size(near,1)/2, :, 1), 'r'); ylim(yPlotRange)
 hold on
 plot(ringing(size(ringing,1)/2, :, 1), 'b'); ylim(yPlotRange)
 xlim('tight')
+legend('Original', 'Ringing')
+set(gca,'YTick',[])
+set(gca,'XTick',[])
 %grid on
+title('Both')
 hold off
 
 

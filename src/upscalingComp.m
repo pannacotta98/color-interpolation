@@ -3,12 +3,18 @@ addpath('./../ext/fig-utils') % showmethefigs
 addpath('./ogniewski')
 %%
 close all
-%%
+%% Load test image directly
 im = loadTestImage();
 whos im
 
+%% Or let the image be scaled down
+% im = loadTestImage();
+% preferredWidth = 
+
+%%
+
 scaleMethods = {'nearest', 'bilinear', 'bicubic', 'lanczos2', 'lanczos3'};
-scaleFactor = 16;
+scaleFactor = 5;
 
 for i = 1:length(scaleMethods)
    figure('Name', scaleMethods{i});

@@ -6,12 +6,12 @@ addpath('./ogniewski')
 %%
 % im = im2double(imread('https://entropymine.com/imageworsener/gamma/g/rasp-grayator.png'));
 im = loadTestImage();
-scaleFactor = 8;
+scaleFactor = 32;
 images = {};
 
 %%
-colSpaces = {'srgb', 'linrgb', 'lab', 'ycbcr', 'hsv', 'xyz'};
-% colSpaces = {'srgb', 'linrgb', 'lab', 'ycbcr', 'xyz'};
+% colSpaces = {'srgb', 'linrgb', 'lab', 'ycbcr', 'hsv', 'xyz'};
+colSpaces = {'srgb', 'linrgb', 'lab', 'ycbcr', 'xyz'};
 %colSpaces = {'srgb', 'linrgb', 'ycbcr', 'xyz'};
 for i = 1:length(colSpaces)
     imOut = upscaleInColorSpace(im, scaleFactor, colSpaces{i}, 'ogniewski', true);
@@ -36,9 +36,12 @@ disp(max(diff(:)));
 imshow(rescale(diff));
 
 %% DeltaE diff
-diff = deltaE(images{1}, images{2});
+diff = deltaE(images{1}, images{4});
 imagesc(diff); colorbar
 
+%% DeltaE image
+diff = deltaE(images{1}, images{4});
+imshow(diff)
 
 %%
 imshowpair(images{1}, images{2}, 'checkerboard');
