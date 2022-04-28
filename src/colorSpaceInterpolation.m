@@ -40,8 +40,9 @@ diff = deltaE(images{1}, images{4});
 imagesc(diff); colorbar
 
 %% DeltaE image
-diff = deltaE(images{1}, images{4});
-imshow(diff)
+diff = deltaE(images{2}, images{5});
+maxDiff = max(diff(:))
+imshow(diff ./ maxDiff)
 
 %%
 imshowpair(images{1}, images{2}, 'checkerboard');

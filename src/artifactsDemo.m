@@ -162,7 +162,17 @@ discoloring = imresize(im, scaleFactor, 'lanczos3');
 imshow(discoloring);
 
 %%
+imshow(0.5 .* discoloring + 0.25);
+
+
+%%
 imwrite(discoloring, './../output/discoloring.png');
+
+%%
+mesh(discoloring(:,:,1));
+
+%%
+imshow(imresize(im.*0.5 + 0.25, scaleFactor, 'lanczos3'))
 
 %% === GRADIENT DISCREPANCY ===
 clf
@@ -184,7 +194,15 @@ imshow(imresize(gradDiscSrc,scaleFactor, 'bilinear'));
 
 %%
 clf
-plot(gradDiscrep(size(gradDiscrep,1)/2, :, 1), 'r');
+plot(linspace(15,166,6), gradDiscSrc(1,:,1), 'ko')
+hold on
+
+%plot(gradDiscrep(size(gradDiscrep,1)/2, :, 1), 'k');
+
+
+lakrits = imresize(gradDiscSrc,scaleFactor, 'bilinear');
+plot(lakrits(1,:,1), 'k')
+hold off
 
 %%
 clf

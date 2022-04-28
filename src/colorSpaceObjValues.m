@@ -5,7 +5,7 @@ addpath('../data/color-space-eval/')
 img = loadTestImage();
 scalefactor = 4;
 
-downscaleAllInSameSpace = false;
+downscaleAllInSameSpace = true;
 downscaleSpace = 'srgb'; % if above is true
 downscaleMethod = 'lanczos2';
 upscaleMethod = 'ogniewski';
